@@ -17,4 +17,3 @@ D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\Se
 D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.CoreCompileInputs.cache
 D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.dll
 D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.pdb
-D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\SecurityLibrary\obj\Debug\SecurityLibrary.csproj.AssemblyReference.cache

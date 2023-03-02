@@ -40,6 +40,7 @@ namespace SecurityPackageTest
         {
             PlayFair algorithm = new PlayFair();
             string plain = algorithm.Decrypt(mainCipher, mainKey);
+            Console.WriteLine();
             Assert.IsTrue(plain.Equals(mainPlain, StringComparison.InvariantCultureIgnoreCase));
         }
 
