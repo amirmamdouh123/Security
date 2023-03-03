@@ -21,12 +21,13 @@ namespace SecurityLibrary
             key = "playfairexample";
             string filtered = "";
             bool i_j = false;
+            plainText = "communication";
+            #region filtering key
             //filtering key from repeated letters
             foreach (char letter in key) {
 
                 if (!filtered.Contains(letter))
                 {
-                #region i_or_j
                     if ((letter == 'i' || letter == 'j'))
                     {
                         if (!i_j)
@@ -36,13 +37,15 @@ namespace SecurityLibrary
                         }
                         continue;
                     }
-                 #endregion
                     filtered += letter;
                 }
             }
-           
-          
-            //Console.WriteLine(i + " " + j);
+
+            //output is key after filtered
+            #endregion
+
+            #region padding_key
+            //padding key
             int num_letter = 97;
             while (filtered.Length<25) {
                 char padded_letter = (char)num_letter;
@@ -65,17 +68,16 @@ namespace SecurityLibrary
                     }
                 }
                 num_letter++;
+                //Console.WriteLine(filtered);
+
             }
-            //Console.WriteLine(i + " " + j);
-            //Console.WriteLine(filtered[filtered.Length-1]);
-       
+            #endregion
 
-
-            char[,] matrix = new char[5, 5];
+            char[,] key_matrix = new char[5, 5];
             int i = 0, j = 0;
             foreach (char x in filtered)
             {
-                matrix[i, j] = x;
+                key_matrix[i, j] = x;
                 if (j == 4)
                 {
                     j = 0;
@@ -83,17 +85,118 @@ namespace SecurityLibrary
                 }
                 else { j++; }
             }
-            for (int u = 0; u < 5; u++) {
-                for (int f = 0; f < 5; f++) {
-                    Console.WriteLine(matrix[u, f]);
+
+
+
+
+
+            #region dividing word
+            List<List<char>> words = new List<List<char>>();
+            List<char> word = new List<char>();
+            int iterator = 0;
+            for (int k=0; k < plainText.Count(); k++) {
+                if (k == plainText.Count() - 1 && iterator == 0)
+                {
+                    word.Add(plainText[k]);
+                    word.Add('x');
+                    words.Add(word);
+                  //  Console.WriteLine(words[words.Count - 1][0] + " " + words[words.Count - 1][1]);
+
+                    break;
+                }
+                if (iterator == 1 && word[0] == plainText[k])
+                {
+                    k -=1;
+                    word.Add('x');
+
+                }
+                else
+                {
+                    word.Add(plainText[k]);
+                }
+               
+                iterator++;
+                
+                if (iterator == 2) { 
+                    iterator = 0;
+                    words.Add(word);
+                 //  Console.WriteLine(words[words.Count-1][0]+" "+words[words.Count - 1][1]);
+                    word = new List<char>();
                 }
             }
+            #endregion
 
+            string encripted = "";
+            foreach (List<char> pair in words) {
+                int index_i1=0, index_j1=0, index_i2=0, index_j2=0;
+                bool bool1=false, bool2=false;
+                #region get index of pairs
+                for (i = 0; i < 5; i++)
+                {
+                    for (j = 0; j < 5; j++)
+                    {
+                        if (pair[0] == key_matrix[i, j])
+                        {
+                            index_i1 = i;
+                            index_j1 = j;
+                            bool1 = true;
+                        }
+                        if (pair[1] == key_matrix[i, j])
+                        {
+                            index_i2 = i;
+                            index_j2 = j;
+                            bool2 = true;
+                        }
+                        if (bool1 && bool2)
+                            break;
+                    }
+                    if (bool1 && bool2)
+                    {
+                        break;
+                    }
+                }
+                #endregion
+                #region encription
+                if (index_j1 == index_j2) {
+                    try
+                    {
+                        encripted += key_matrix[index_i1 + 1, index_j1];
+                    }
+                    catch (Exception e) {
+                        encripted += key_matrix[0, index_j1];
+                    }
+                    try
+                    {
+                        encripted += key_matrix[index_i2 + 1, index_j2];
+                    }
+                    catch (Exception e) {
+                        encripted += key_matrix[0, index_j2];
+                    }
+                }
+                else if(index_i1 == index_i2){
+                    try
+                    {
+                        encripted += key_matrix[index_i1, index_j1 + 1];
+                    }
+                    catch (Exception e) {
+                        encripted += key_matrix[index_i1, 0];
+                    }
+                    try
+                    {
+                        encripted += key_matrix[index_i2, index_j2 + 1];
+                    }
+                    catch (Exception e) {
+                        encripted += key_matrix[index_i2, index_j2 + 1];
+                    }
+                }
+                else {
+                encripted+= key_matrix[index_i1, index_j2];
+                encripted += key_matrix[index_i2, index_j1];
+                }
 
-
-
-
-            throw new NotImplementedException();
+            }
+            #endregion
+            return encripted;
         }
     }
 }

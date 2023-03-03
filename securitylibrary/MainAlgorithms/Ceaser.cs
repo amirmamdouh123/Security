@@ -36,7 +36,10 @@ namespace SecurityLibrary
 
         public int Analyse(string plainText, string cipherText)
         {
-            throw new NotImplementedException();
+            char x1 = plainText[0];
+            char x2 = plainText[1];
+            int key=Math.Abs(x1 - x2);
+            return key;
         }
     }
 }
