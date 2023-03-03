@@ -36,8 +36,10 @@ namespace SecurityLibrary
 
         public int Analyse(string plainText, string cipherText)
         {
-            char x1 = plainText[0];
-            char x2 = plainText[1];
+            cipherText = cipherText.ToLower();
+            plainText = plainText.ToLower();
+            int x1 =((int) plainText[0]);
+            int x2 = ((int)cipherText[0]);
             int key=Math.Abs(x1 - x2);
             return key;
         }

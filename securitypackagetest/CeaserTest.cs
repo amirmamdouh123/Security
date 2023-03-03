@@ -94,6 +94,7 @@ namespace SecurityPackageTest
         {
             Ceaser algorithm = new Ceaser();
             int key = algorithm.Analyse(mainPlain2, mainCipher2);
+            Console.WriteLine();
             Assert.AreEqual(mainKey2, key);
         }
 
