@@ -7,9 +7,9 @@ namespace SecurityPackageTest
     [TestClass]
     public class VignereTest
     {
-        string mainPlain = "wearediscoveredsaveyourself";
+        string mainPlain =     "wearediscoveredsaveyourself";
         string mainCipherRep = "zicvtwqngrzgvtwavzhcqyglmgj".ToUpper();
-        string mainCipherAuto = "zicvtwqngkzeiigasxstslvvwla".ToUpper();
+        string mainCipherAuto ="zicvtwqngkzeiigasxstslvvwla".ToUpper();
         string mainKey = "deceptive";
 
         string newPlain = "MICHIGANTECHNOLOGICALUNIVERSITY".ToLower();
@@ -22,6 +22,7 @@ namespace SecurityPackageTest
         {
             RepeatingkeyVigenere algorithm = new RepeatingkeyVigenere();
             string cipher = algorithm.Encrypt(mainPlain, mainKey);
+            Console.WriteLine();
             Assert.IsTrue(cipher.Equals(mainCipherRep, StringComparison.InvariantCultureIgnoreCase));
         }
 
@@ -62,6 +63,7 @@ namespace SecurityPackageTest
         {
             AutokeyVigenere algorithm = new AutokeyVigenere();
             string key = algorithm.Analyse(mainPlain, mainCipherAuto);
+            Console.WriteLine();
             Assert.IsTrue(key.Equals(mainKey, StringComparison.InvariantCultureIgnoreCase));
         }
 
@@ -94,6 +96,7 @@ namespace SecurityPackageTest
         {
             AutokeyVigenere algorithm = new AutokeyVigenere();
             string cipher = algorithm.Encrypt(newPlain, newKey);
+            Console.WriteLine(cipher);
             Assert.IsTrue(cipher.Equals(newCipherAuto, StringComparison.InvariantCultureIgnoreCase));
         }
 
