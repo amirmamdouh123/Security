@@ -8,120 +8,180 @@ namespace SecurityLibrary
 {
     public class PlayFair : ICryptographic_Technique<string, string>
     {
-        public string Decrypt(string cipherText, string key)
-        {   
-          
+        string alphabets = "abcdefghiklmnopqrstuvwxyz";
 
-            throw new NotImplementedException();
+
+
+        char[,] cipher_matrix = new char[5, 5];
+        public char[,] updatedtedKey(string key)
+        {
+            HashSet<char> Gkey = new HashSet<char>();
+            int keyLength = key.Length;
+            HashSet<char>.Enumerator em = Gkey.GetEnumerator();
+            for (int i = 0; i < keyLength; i++)
+            {
+                if (key[i] == 'j')
+                {
+                    Gkey.Add('i');
+                }
+                else
+                {
+                    Gkey.Add(key[i]);
+                }
+            }
+
+            for (int i = 0; i < 25; i++)
+            {
+                //without j
+                Gkey.Add(alphabets[i]);
+            }
+            for (int i = 0; i < 25; i++)
+            {
+                Gkey.Add(alphabets[i]);
+            }
+            int row = 0, col = 0;
+            foreach (var v in Gkey)
+            {
+
+                cipher_matrix[col, row] = v;
+                //Console.WriteLine(cipher_matrix[row, col]);
+                row = (row + 1) % 5;
+                if (row == 0)
+                {
+                    col++;
+                }
+
+            }
+            return cipher_matrix;
+        }
+
+
+
+        public string Decrypt(string cipherText, string key)
+        {
+            cipherText = cipherText.ToLower();
+            string plain_text = "";
+            char[,] cipher_matrix = updatedtedKey(key.ToLower());
+            List<string> blocks = new List<string>();
+            int CLT = cipherText.Length - 1;
+            for (int i = 0; i < CLT; i += 2)
+            {
+                blocks.Add(cipherText.Substring(i, 2));
+            }
+
+            Console.WriteLine(blocks.Count);
+
+            for (int z = 0; z < blocks.Count; z++)
+            {      // 2 bool for each point
+                bool found_point1 = false, found_point2 = false;
+                int pointrow1 = 0, pointrow2 = 0, pointcol1 = 0, pointcol2 = 0;
+                // intilize matrix[5*5]
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {     //first point
+                        if (blocks[z][0] == cipher_matrix[i, j])
+                        {
+                            pointcol1 = i;
+                            pointrow1 = j;
+
+                            found_point1 = true;
+                        }
+                        // sec point
+                        if (blocks[z][1] == cipher_matrix[i, j])
+                        {
+                            pointcol2 = i;
+                            pointrow2 = j;
+
+                            found_point2 = true;
+                        }
+                        //كدا حددت مكان النقطتين هعمل ال تلت حالات
+                        if (found_point1 && found_point2)
+                        {
+                            //if same row
+                            if (pointrow1 == pointrow2)
+                            {
+                                plain_text += cipher_matrix[(pointcol1 + 4) % 5, pointrow1];
+                                plain_text += cipher_matrix[(pointcol2 + 4) % 5, pointrow2];
+                            }
+                            //if same col 
+                            else if (pointcol1 == pointcol2)
+                            {
+                                plain_text += cipher_matrix[pointcol1, (pointrow1 + 4) % 5];
+                                plain_text += cipher_matrix[pointcol2, (pointrow2 + 4) % 5];
+                            }
+                            // niether
+                            else
+                            {
+                                plain_text += cipher_matrix[pointcol1, pointrow2];
+                                plain_text += cipher_matrix[pointcol2, pointrow1];
+                            }
+                            break;
+                        }
+                    }
+                    if (found_point1 && found_point2) break;
+                }
+            }
+            blocks = new List<string>();
+            // احنا شغالين حرفين حرفين
+            for (int i = 0; i < plain_text.Length - 1; i += 2)
+            {
+                blocks.Add(plain_text.Substring(i, 2));
+            }
+            //x عندى حرف متكرر وهحط 
+            int changable_index = 0;
+            for (int b = 0; b < blocks.Count - 1; b++)
+            {
+                Console.WriteLine(blocks[b]);
+                if (blocks[b][1] == 'x' && blocks[b][0] == blocks[b + 1][0])
+                {
+                    plain_text = plain_text.Remove(b * 2 + 1 + changable_index, 1);
+                    changable_index--;
+
+                }
+            }
+            //x لو كانت فردى و اخر حرف 
+            if (plain_text[plain_text.Length - 1] == 'x')
+            {
+                plain_text = plain_text.Remove(plain_text.Length - 1);
+            }
+            Console.WriteLine(plain_text);
+            Console.WriteLine(plain_text.Length);
+            return plain_text.ToUpper();
         }
 
         public string Encrypt(string plainText, string key)
         {
-         //   Console.WriteLine("text: "+plainText + "\n" +"key: "+ key);
-            string filtered = "";
-            bool i_j = false;
-            #region filtering key
-            //filtering key from repeated letters
-            foreach (char letter in key) {
+            //   Console.WriteLine("text: "+plainText + "\n" +"key: "+ key);
+            char[,] key_matrix = updatedtedKey(key);
 
-                if (!filtered.Contains(letter))
-                {
-                    if ((letter == 'i' || letter == 'j'))
-                    {
-                        if (!i_j)
-                        {
-                            i_j = true;
-                            filtered += letter; 
-                        }
-                        continue;
-                    }
-                    filtered += letter;
-                }
-            }
-
-            //output is key after filtered
-            #endregion
-
-            #region padding_key
-            //padding key
-            int num_letter = 97;
-            while (filtered.Length<25) {
-                char padded_letter = (char)num_letter;
-                if (!filtered.Contains(padded_letter))
-                {
-
-                    #region i_or_j
-                    if ((padded_letter == 'i' || padded_letter == 'j'))
-                    {
-                        if (!i_j)
-                        {
-                            i_j = true;
-                            filtered += padded_letter;
-                        }
-                    }
-                    else
-                    {
-                        #endregion
-                        filtered += padded_letter;
-                    }
-                }
-                num_letter++;
-                //Console.WriteLine(filtered);
-
-            }
-            #endregion
-
-            for (int q = 0; q < 25; q+=5) {
-                Console.WriteLine(filtered[q]+" "+filtered[q+1]+" "+ filtered[q+2] + " "+ filtered[q+3] + " "+filtered[q+4]);
-            }
-            char[,] key_matrix = new char[5, 5];
-            int i = 0, j = 0;
-            foreach (char x in filtered)
-            {
-                key_matrix[i, j] = x;
-                if (j == 4)
-                {
-                    j = 0;
-                    i++;
-                }
-                else { j++; }
-            }
-
-
-
-
-
-            #region dividing word
+            #region dividing word into pairs
             List<List<char>> words = new List<List<char>>();
             List<char> word = new List<char>();
             int iterator = 0;
-            for (int k=0; k < plainText.Count(); k++) {
+            for (int k = 0; k < plainText.Count(); k++) {
                 if (k == plainText.Count() - 1 && iterator == 0)
                 {
                     word.Add(plainText[k]);
                     word.Add('x');
                     words.Add(word);
-                  //Console.WriteLine(words[words.Count - 1][0] + " " + words[words.Count - 1][1]);
-
+                    //Console.WriteLine(words[words.Count - 1][0] + " " + words[words.Count - 1][1]);
                     break;
                 }
                 if (iterator == 1 && word[0] == plainText[k])
                 {
-                    k -=1;
+                    k -= 1;
                     word.Add('x');
-
                 }
                 else
                 {
                     word.Add(plainText[k]);
                 }
-               
                 iterator++;
-                
-                if (iterator == 2) { 
+                if (iterator == 2) {
                     iterator = 0;
                     words.Add(word);
-                 //  Console.WriteLine(words[words.Count-1][0]+" "+words[words.Count - 1][1]);
+                    //  Console.WriteLine(words[words.Count-1][0]+" "+words[words.Count - 1][1]);
                     word = new List<char>();
                 }
             }
@@ -129,13 +189,13 @@ namespace SecurityLibrary
 
             string encripted = "";
             foreach (List<char> pair in words) {
-            //    Console.WriteLine("in: "+pair[0]+" "+pair[1]);
-                int index_i1=0, index_j1=0, index_i2=0, index_j2=0;
-                bool bool1=false, bool2=false;
+                //    Console.WriteLine("in: "+pair[0]+" "+pair[1]);
+                int index_i1 = 0, index_j1 = 0, index_i2 = 0, index_j2 = 0;
+                bool bool1 = false, bool2 = false;
                 #region get index of pairs
-                for (i = 0; i < 5; i++)
+                for (int i = 0; i < 5; i++)
                 {
-                    for (j = 0; j < 5; j++)
+                    for (int j = 0; j < 5; j++)
                     {
                         if (pair[0] == key_matrix[i, j])
                         {
@@ -154,7 +214,7 @@ namespace SecurityLibrary
                     }
                     if (bool1 && bool2)
                     {
-                     //   Console.WriteLine("out: "+pair[0] + "  "+ pair[1]);
+                        //   Console.WriteLine("out: "+pair[0] + "  "+ pair[1]);
                         break;
                     }
                 }
@@ -176,7 +236,7 @@ namespace SecurityLibrary
                         encripted += key_matrix[0, index_j2];
                     }
                 }
-                else if(index_i1 == index_i2){
+                else if (index_i1 == index_i2) {
                     try
                     {
                         encripted += key_matrix[index_i1, index_j1 + 1];
@@ -191,13 +251,13 @@ namespace SecurityLibrary
                     catch (Exception e) {
                         encripted += key_matrix[index_i2, 0];
                     }
-                //    Console.WriteLine(encripted);
+                    //    Console.WriteLine(encripted);
                 }
                 else {
-                encripted+= key_matrix[index_i1, index_j2];
-                encripted += key_matrix[index_i2, index_j1];
+                    encripted += key_matrix[index_i1, index_j2];
+                    encripted += key_matrix[index_i2, index_j1];
                 }
-             //   Console.WriteLine(encripted);
+                //   Console.WriteLine(encripted);
             }
             #endregion
 
@@ -205,3 +265,4 @@ namespace SecurityLibrary
         }
     }
 }
+
