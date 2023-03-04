@@ -8,20 +8,88 @@ namespace SecurityLibrary
 {
     public class Monoalphabetic : ICryptographicTechnique<string, string>
     {
+
+
         public string Analyse(string plainText, string cipherText)
         {
+
+
+
             throw new NotImplementedException();
         }
 
         public string Decrypt(string cipherText, string key)
         {
-            throw new NotImplementedException();
+            key = key.ToUpper();
+
+            if (key.Length != 26 || key.Distinct().Count() != 26)
+            {
+                throw new ArgumentException("The key must contain exactly 26 unique letters.");
+            }
+
+            var map = new Dictionary<char, char>();
+            for (int i = 0; i < 26; i++)
+            {
+                map[key[i]] = alphabetc[i];
+            }
+            var decryptedText = new StringBuilder();
+            foreach (char c in cipherText.ToUpper())
+            {
+                if (map.ContainsKey(c))
+                {
+                    decryptedText.Append(map[c]);
+                }
+                else
+                {
+                    decryptedText.Append(c);
+                }
+            }
+
+            return decryptedText.ToString();
         }
+
+        private readonly string alphabetc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+
+
+
+
 
         public string Encrypt(string plainText, string key)
         {
-            throw new NotImplementedException();
+            key = key.ToUpper();
+
+            if (key.Length != 26 || key.Distinct().Count() != 26)
+            {
+                throw new ArgumentException("The key must contain exactly 26 unique letters.");
+            }
+
+            var map = new Dictionary<char, char>();
+            for (int i = 0; i < 26; i++)
+            {
+                map[alphabetc[i]] = key[i];
+            }
+
+
+            var encryptedText = new StringBuilder();
+            foreach (char c in plainText.ToUpper())
+            {
+                if (map.ContainsKey(c))
+                {
+                    encryptedText.Append(map[c]);
+                }
+                else
+                {
+                    encryptedText.Append(c);
+                }
+            }
+
+            return encryptedText.ToString();
         }
+
+
+
+
 
         /// <summary>
         /// Frequency Information:

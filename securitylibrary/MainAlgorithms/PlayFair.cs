@@ -11,17 +11,15 @@ namespace SecurityLibrary
         public string Decrypt(string cipherText, string key)
         {   
           
-            Encrypt(cipherText, key);
 
             throw new NotImplementedException();
         }
 
         public string Encrypt(string plainText, string key)
         {
-            key = "playfairexample";
+         //   Console.WriteLine("text: "+plainText + "\n" +"key: "+ key);
             string filtered = "";
             bool i_j = false;
-            plainText = "communication";
             #region filtering key
             //filtering key from repeated letters
             foreach (char letter in key) {
@@ -73,6 +71,9 @@ namespace SecurityLibrary
             }
             #endregion
 
+            for (int q = 0; q < 25; q+=5) {
+                Console.WriteLine(filtered[q]+" "+filtered[q+1]+" "+ filtered[q+2] + " "+ filtered[q+3] + " "+filtered[q+4]);
+            }
             char[,] key_matrix = new char[5, 5];
             int i = 0, j = 0;
             foreach (char x in filtered)
@@ -100,7 +101,7 @@ namespace SecurityLibrary
                     word.Add(plainText[k]);
                     word.Add('x');
                     words.Add(word);
-                  //  Console.WriteLine(words[words.Count - 1][0] + " " + words[words.Count - 1][1]);
+                  //Console.WriteLine(words[words.Count - 1][0] + " " + words[words.Count - 1][1]);
 
                     break;
                 }
@@ -128,6 +129,7 @@ namespace SecurityLibrary
 
             string encripted = "";
             foreach (List<char> pair in words) {
+            //    Console.WriteLine("in: "+pair[0]+" "+pair[1]);
                 int index_i1=0, index_j1=0, index_i2=0, index_j2=0;
                 bool bool1=false, bool2=false;
                 #region get index of pairs
@@ -152,6 +154,7 @@ namespace SecurityLibrary
                     }
                     if (bool1 && bool2)
                     {
+                     //   Console.WriteLine("out: "+pair[0] + "  "+ pair[1]);
                         break;
                     }
                 }
@@ -186,16 +189,18 @@ namespace SecurityLibrary
                         encripted += key_matrix[index_i2, index_j2 + 1];
                     }
                     catch (Exception e) {
-                        encripted += key_matrix[index_i2, index_j2 + 1];
+                        encripted += key_matrix[index_i2, 0];
                     }
+                //    Console.WriteLine(encripted);
                 }
                 else {
                 encripted+= key_matrix[index_i1, index_j2];
                 encripted += key_matrix[index_i2, index_j1];
                 }
-
+             //   Console.WriteLine(encripted);
             }
             #endregion
+
             return encripted;
         }
     }
