@@ -27,6 +27,7 @@ namespace SecurityPackageTest
         {
             RailFence algorithm = new RailFence();
             string cipher = algorithm.Encrypt(mainPlain1, mainKey);
+            Console.WriteLine();
             Assert.IsTrue(cipher.Equals(mainCipher, StringComparison.InvariantCultureIgnoreCase));
         }
 
