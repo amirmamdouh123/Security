@@ -50,7 +50,7 @@ namespace SecurityPackageTest
         public void HillCipherTestEnc2()
         {
             HillCipher algorithm = new HillCipher();
-
+            Console.WriteLine();
             List<int> cipher2 = algorithm.Encrypt(plain, key);
             for (int i = 0; i < cipher.Count; i++)
             {
