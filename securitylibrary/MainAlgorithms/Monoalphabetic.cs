@@ -8,14 +8,59 @@ namespace SecurityLibrary
 {
     public class Monoalphabetic : ICryptographicTechnique<string, string>
     {
-
-
         public string Analyse(string plainText, string cipherText)
         {
+            // throw new NotImplementedException();
+            int PTlenght, CTlenght;
+            string key = "";
+            string letters = "abcdefghijklmnopqrstuvwxyz";
+
+            SortedDictionary<char, char> keyDec = new SortedDictionary<char, char>();
+            Dictionary<char, bool> cipherDec = new Dictionary<char, bool>();
+
+            PTlenght = plainText.Length;
+            CTlenght = cipherText.Length;
+            plainText = plainText.ToLower();
+            cipherText = cipherText.ToLower();
+
+            //هنحط البلان مع السيفر
+            for (int i = 0; i < PTlenght; i++)
+            {
+                if (!keyDec.ContainsKey(plainText[i]))
+                {
+                    keyDec.Add(plainText[i], cipherText[i]);
+                    cipherDec.Add(cipherText[i], true);
+                }
+            }
 
 
+            //بكمل الفاضى فى الديكشنرى
+            //بملاها ب استرنج من (a to z)
+            if (keyDec.Count != 26)
+            {   //فور لوب بتلف على ال key
+                for (int j = 0; j < 26; j++)
+                {
+                    if (!keyDec.ContainsKey(letters[j]))
+                    {   //فور لوب على السيفر علشان اعمل ادد ب الترتيب
+                        for (int k = 0; k < 26; k++)
+                        {
+                            if (!cipherDec.ContainsKey(letters[k]))
+                            {
+                                keyDec.Add(letters[j], letters[k]);
+                                cipherDec.Add(letters[k], true);
+                                k = 26;
+                            }
+                        }
+                    }
+                }
+            }
 
-            throw new NotImplementedException();
+            foreach (var items in keyDec)
+            {
+                key += items.Value;
+            }
+            return key;
+
         }
 
         public string Decrypt(string cipherText, string key)
@@ -124,7 +169,43 @@ namespace SecurityLibrary
         /// <returns>Plain text</returns>
         public string AnalyseUsingCharFrequency(string cipher)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            // histogram
+            string alphabet_freq = "etaoinsrhldcumfpgwybvkxjqz";
+            Dictionary<char, int> freq = new Dictionary<char, int>();
+            Dictionary<char, char> result = new Dictionary<char, char>();
+            cipher = cipher.ToLower();
+            string p_text = "";
+            int cont = 0;
+
+            for (int i = 0; i < cipher.Length; i++)
+            {
+                if (freq.ContainsKey(cipher[i]))
+                {
+                    freq[cipher[i]]++;
+                }
+                else
+                {
+                    freq.Add(cipher[i], 0);
+                }
+            }
+
+            freq = freq.OrderBy(x => x.Value).Reverse().ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var item in freq)
+            {
+                result.Add(item.Key, alphabet_freq[cont]);
+                cont++;
+            }
+
+            int j = 0;
+            while (j < cipher.Length)
+            {
+                p_text = p_text + result[cipher[j]];
+
+                j++;
+            }
+            return p_text;
         }
     }
 }

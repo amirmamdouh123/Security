@@ -32,9 +32,26 @@ namespace SecurityLibrary
 
         public string Decrypt(string cipherText, int key)
         {
-           
-            return "";
 
+            string plainText = "";
+
+
+            // throw new NotImplementedException();
+
+            decimal count = cipherText.Length;
+            int depth = (int)Math.Ceiling(count / key); //error
+            for (int i = 0; i < depth; i++)
+            {
+                for (int j = 0; j < key; j++)//error
+                {
+                    try
+                    {
+                        plainText += cipherText[(j * depth) + i];
+                    }
+                    catch (Exception e) { }
+                }
+            }
+            return plainText;
         }
 
         public string Encrypt(string plainText, int key)

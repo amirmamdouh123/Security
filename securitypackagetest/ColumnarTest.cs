@@ -34,8 +34,11 @@ namespace SecurityPackageTest
         public void ColumnarTestEnc1()
         {
             Columnar algorithm = new Columnar();
+            Console.WriteLine();
             string cipher = algorithm.Encrypt(mainPlain1, mainkey);
             // Add x's or not
+            Console.WriteLine(mainCipher2);
+            Console.WriteLine(cipher);
             Assert.IsTrue(cipher.Equals(mainCipher1, StringComparison.InvariantCultureIgnoreCase)
                        || cipher.Equals(mainCipher2, StringComparison.InvariantCultureIgnoreCase));
         }
@@ -68,6 +71,9 @@ namespace SecurityPackageTest
         {
             Columnar algorithm = new Columnar();
             string cipher = algorithm.Encrypt(mainPlain3, mainkey1);
+            Console.WriteLine(cipher);
+            Console.WriteLine(mainCipher3);
+
             Assert.IsTrue(cipher.Equals(mainCipher3, StringComparison.InvariantCultureIgnoreCase));
         }
 
@@ -130,6 +136,7 @@ namespace SecurityPackageTest
         {
             Columnar algorithm = new Columnar();
             string cipher = algorithm.Encrypt(newPlain, newKey);
+            Console.WriteLine(cipher);
             Assert.IsTrue(cipher.Equals(newCipher, StringComparison.InvariantCultureIgnoreCase));
         }
 
