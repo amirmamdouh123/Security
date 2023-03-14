@@ -36,11 +36,17 @@ namespace SecurityLibrary
 
         public int Analyse(string plainText, string cipherText)
         {
+
             cipherText = cipherText.ToLower();
             plainText = plainText.ToLower();
+            Console.WriteLine((int)plainText[0]);
+            Console.WriteLine((int)cipherText[0]);
             int x1 =((int) plainText[0]);
             int x2 = ((int)cipherText[0]);
-            int key=Math.Abs(x1 - x2);
+            int key=(x2 - x1);
+            if (key < 0)
+                key += 26;
+            Console.WriteLine((x2 - x1));
             return key;
         }
     }
