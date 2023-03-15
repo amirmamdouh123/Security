@@ -41,7 +41,7 @@ namespace SecurityLibrary
                     flag++;
                 }
             }
-            z
+            
             return key.ToString();
         }
 
@@ -65,7 +65,6 @@ namespace SecurityLibrary
             for (int j = 0; j  < ki.Length && j < cl; j++)
             {
                 int res = (ct[j] - ki[j] + 26) % 26;
-                res += 'A';
                 plaintxt += (char)(res);
             }
             return plaintxt;

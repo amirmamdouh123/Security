@@ -62,7 +62,7 @@ namespace SecurityPackageTest
         public void HillCipherTestDec2()
         {
             HillCipher algorithm = new HillCipher();
-
+            Console.WriteLine();
             List<int> plain2 = algorithm.Decrypt(cipher, key);
             for (int i = 0; i < plain.Count; i++)
             {
