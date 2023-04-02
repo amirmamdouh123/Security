@@ -105,6 +105,8 @@ namespace SecurityLibrary
 
         public List<int> Decrypt(List<int> cipherText, List<int> key)
         {
+                       Console.WriteLine(cipherText);
+
             int m = (int)Math.Sqrt(key.Count);
 
             //for (int i = 0; i < 4; i++) { 
@@ -121,12 +123,16 @@ namespace SecurityLibrary
 
             while (((26 - temp) * (det))%26!=1) {
                 temp++;
+                if (temp == 50)
+                {
+                     throw new Exception("Error");
+                }
             }
             decimal det_inverse = (26 - (temp% 26));
            Console.WriteLine(det_inverse);
             
 
-            decimal[,] inverse=new decimal[2,2] ;
+            decimal[,] inverse=new decimal[2,2];
 
             if (m == 2) {
 

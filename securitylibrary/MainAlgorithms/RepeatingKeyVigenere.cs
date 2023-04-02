@@ -21,13 +21,13 @@ namespace SecurityLibrary
 
             for (int i = 0; i < plainText.Length; i++)
             {
-               
-                ki.Append(e_letters[( (Array.IndexOf(e_letters, cipherText[i]) - Array.IndexOf(e_letters, plainText[i])) +26)% 26]);
+
+                ki.Append(e_letters[((Array.IndexOf(e_letters, cipherText[i]) - Array.IndexOf(e_letters, plainText[i])) + 26) % 26]);
             }
 
             String key = ki[0].ToString();
-           
-            
+
+
             while (true)
             {
                 if (Encrypt(plainText, key.ToString()).ToString().Equals(cipherText))
@@ -41,30 +41,31 @@ namespace SecurityLibrary
                     flag++;
                 }
             }
-            
+
             return key.ToString();
         }
 
         public string Decrypt(string cipherText, string key)
         {
             //throw new NotImplementedException();
-           
+
             string ki = key.ToUpper();
             int kl = ki.Length;
             string ct = cipherText.ToUpper();
             int cl = ct.Length;
             string plaintxt = "";
-            for (int i = 0; i < cl ; i++)
+            for (int i = 0; i < cl; i++)
             {
                 if (cl == kl)
                     break;
                 ki += ki[i];
             }
-            
-           
-            for (int j = 0; j  < ki.Length && j < cl; j++)
+
+
+            for (int j = 0; j < ki.Length && j < cl; j++)
             {
                 int res = (ct[j] - ki[j] + 26) % 26;
+                res += 'A';
                 plaintxt += (char)(res);
             }
             return plaintxt;

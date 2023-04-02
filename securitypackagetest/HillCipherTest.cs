@@ -50,7 +50,7 @@ namespace SecurityPackageTest
         public void HillCipherTestEnc2()
         {
             HillCipher algorithm = new HillCipher();
-            Console.WriteLine();
+
             List<int> cipher2 = algorithm.Encrypt(plain, key);
             for (int i = 0; i < cipher.Count; i++)
             {
@@ -62,7 +62,7 @@ namespace SecurityPackageTest
         public void HillCipherTestDec2()
         {
             HillCipher algorithm = new HillCipher();
-            Console.WriteLine();
+
             List<int> plain2 = algorithm.Decrypt(cipher, key);
             for (int i = 0; i < plain.Count; i++)
             {
@@ -144,7 +144,7 @@ namespace SecurityPackageTest
 
         #endregion
 
-       
+
         #region error test cases (key with no inverse) 
 
         [TestMethod]
@@ -168,6 +168,6 @@ namespace SecurityPackageTest
 
         #endregion
 
-               
+
     }
 }
