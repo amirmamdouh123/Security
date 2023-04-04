@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SecurityLibrary;
 using System.Linq;
-
+using SecurityLibrary.AES;
 namespace SecurityPackageTest
 {
     [TestClass]
@@ -126,6 +126,15 @@ namespace SecurityPackageTest
         {
             PlayFair algorithm = new PlayFair();
             string plain = algorithm.Decrypt(newCipher, newKey);
+            Assert.IsTrue(plain.Equals(newPlain, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        [TestMethod]
+        public void AES()
+        {
+            AES algorithm = new AES();
+            Console.WriteLine();
+            string plain = algorithm.Encrypt("", "");
             Assert.IsTrue(plain.Equals(newPlain, StringComparison.InvariantCultureIgnoreCase));
         }
 

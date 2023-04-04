@@ -35,3 +35,12 @@ D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\Se
 D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CopyComplete
 D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
 D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\bin\Debug\SecurityPackageTest.dll
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\bin\Debug\SecurityPackageTest.pdb
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\bin\Debug\SecurityLibrary.dll
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\bin\Debug\SecurityLibrary.pdb
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.AssemblyReference.cache
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CoreCompileInputs.cache
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\obj\Debug\SecurityPackageTest.csproj.CopyComplete
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\obj\Debug\SecurityPackageTest.dll
+D:\kolia\fer2a 4\Term 2\Comupter and Network Security\Package\SecurityPackage1\SecurityPackageTest\obj\Debug\SecurityPackageTest.pdb
