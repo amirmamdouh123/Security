@@ -47,14 +47,14 @@ namespace SecurityLibrary.AES
         {
             string a = arr.ToString();
             //-2 to skip the first to char '0x'
-            int m = (int)Math.Sqrt((double)(a.Length-2) / 2);
+            int m = (int)Math.Sqrt((double)(a.Length - 2) / 2);
             string[,] matrix = new string[m, m];
 
             for (int i = 0; i < m; i++)
             {
                 for (int j = 0; j < m * 2; j++)
                 {        //+2 to skip the first to char '0x'
-                    matrix[j / 2, i] += a[i * (m * 2) + j+2];
+                    matrix[j / 2, i] += a[i * (m * 2) + j + 2];
                 }
             }
 
@@ -62,86 +62,63 @@ namespace SecurityLibrary.AES
             return matrix;
         }
 
-        public string XOR(string a,string b,int size) {
-            string xor="";
-            for (int k = 0; k < size; k++)
-            {
-                if (a[k] == b[k])
-                {
-                    xor += '0';
-                }
-                else xor += '1';
-            }
-            return xor;
-        }
-
-
-
-        public string[,] s_box(string[,] plain_matrix, string[,] key_matrix, int m)
+        public byte[,] XOR(byte[,] plain_matrix, byte[,] key_matrix, int m)
         {
-            string[,] sBoxString = new string[16, 16];
-            #region convert s_box_toString    
-            for (int z = 0; z < 16; z++)
-            {
-                for (int s = 0; s < 16; s++)
-                {
-                    sBoxString[s, z] = sBox[s, z].ToString("X2");
-                }
-            }
-            #endregion
-
-
-            string plain_binary;
-            string key_binary;
-
-            string[,] result = new string[m, m];
+            byte[,] result = new byte[m, m];
             for (int i = 0; i < m; i++)
             {
                 for (int j = 0; j < m; j++)
                 {
 
-                    #region binary
 
-                    string xor = ""; //[b0,b1,b2,b3,b4,b5,b6,b7]
-                    plain_binary = String.Join(String.Empty, plain_matrix[j, i].ToUpper().Select(c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')));
-                    key_binary = String.Join(String.Empty, key_matrix[j, i].ToUpper().Select(c => Convert.ToString(Convert.ToInt32(c.ToString(), 16), 2).PadLeft(4, '0')));
+                    result[i, j] = (byte)(plain_matrix[i, j] ^ key_matrix[i, j]);
 
 
-                    #endregion binary
 
-                    #region xor
-
-                    xor = XOR(plain_binary,key_binary, plain_binary.Length);
-                    // string v = String.Format("{0:X2}", Convert.ToUInt64(xor, 2));
-                    #endregion xor
-
-                    string letter = String.Format("{0:X2}", Convert.ToUInt64((xor), 2));//hexa
-
-                   // Console.WriteLine(letter);
-                    int decValue1 = int.Parse(letter[0].ToString(), System.Globalization.NumberStyles.HexNumber);
-                    int decValue2 = int.Parse(letter[1].ToString(), System.Globalization.NumberStyles.HexNumber);
-                    
-               
-
-                    result[j, i] = sBoxString[decValue1, decValue2];
                 }
             }
             return result;
         }
 
 
-        public string[,] shift(string[,] matrix, int m) {
 
-            string[,] after_shift = new string[m,m];
-            for(int i = 0; i < m; i++)
+        public byte[,] s_box(byte[,]matrix, int m)
+        {
+
+            byte[,] result = new byte[m, m];
+            for (int i = 0; i < m; i++)
             {
-                for (int j = 0; j < m; j++) {
+                for (int j = 0; j < m; j++)
+                {
+
+                    string letter = matrix[i, j].ToString("X2");//hexa
+
+                    // Console.WriteLine(letter);
+                    int decValue1 = int.Parse(letter[0].ToString(), System.Globalization.NumberStyles.HexNumber);
+                    int decValue2 = int.Parse(letter[1].ToString(), System.Globalization.NumberStyles.HexNumber);
+
+                    result[i, j] = sBox[decValue1, decValue2];
+                }
+            }
+            return result;
+        }
+
+
+        public byte[,] shift(byte[,] matrix, int m)
+        {
+
+            byte[,] after_shift = new byte[m, m];
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
                     try
                     {
-                        after_shift[i, j-i] = matrix[i, j];
+                        after_shift[i, j - i] = matrix[i, j];
                     }
-                    catch (Exception e) {
-                        after_shift[i, j-i+4] = matrix[i, j];
+                    catch (Exception e)
+                    {
+                        after_shift[i, j - i + 4] = matrix[i, j];
                     }
                 }
             }
@@ -149,7 +126,8 @@ namespace SecurityLibrary.AES
         }
 
 
-        public byte[,] to_byte_matrix(string[,] matrix){
+        public byte[,] to_byte_matrix(string[,] matrix)
+        {
 
             byte[,] byte_matrix = new byte[4, 4];
             for (int i = 0; i < 4; i++)
@@ -158,7 +136,7 @@ namespace SecurityLibrary.AES
                 for (int j = 0; j < 4; j++)
                 {
                     byte_matrix[i, j] = byte.Parse(matrix[i, j], System.Globalization.NumberStyles.HexNumber);
-                    
+
                 }
             }
             return byte_matrix;
@@ -212,51 +190,53 @@ namespace SecurityLibrary.AES
                         }
 
                     }
-                    
+
                     result[j, i] = sum;
                 }
             }
             return result;
         }
-       //10 is no of rounds
-        byte[] rcon = new byte[10] {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1B,0x36}; 
+        //10 is no of rounds
+        byte[] rcon = new byte[10] { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36 };
 
-        public byte[,] generate_key_round(byte[,] key,int round) {
-            
-            byte[,] new_key = new byte[4,4];
+        public byte[,] generate_key_round(byte[,] key, int round)
+        {
+
+            byte[,] new_key = new byte[4, 4];
 
 
 
-            for (int d = 0; d <4; d++)
+            for (int d = 0; d < 4; d++)
             {
-                int x = d-1;
+                int x = d - 1;
                 //first col
                 if (d == 0)
                 {
                     x = 3;
                     //shift w[3] d0,d1,d2,d3   -> (d1,d2,d3,d0) ---> s_box (s1,s2,s3,s0)
-                    for (int i = 0; i < 4; i++){
+                    for (int i = 0; i < 4; i++)
+                    {
                         byte r;
                         byte for_xor = new byte();
                         if (i == 3)
-                            {
-                                //shift
-                                string l = key[0, 3].ToString("X2");
-                                int dec1 = int.Parse(l[0].ToString(), System.Globalization.NumberStyles.HexNumber);
-                                int dec2 = int.Parse(l[1].ToString(), System.Globalization.NumberStyles.HexNumber);
-                                //get corresponding in sBox
-                                for_xor = sBox[dec1, dec2];
-                          // Console.WriteLine(l+" "+for_xor.ToString("X2"));
+                        {
+                            //shift
+                            string l = key[0, 3].ToString("X2");
+                            int dec1 = int.Parse(l[0].ToString(), System.Globalization.NumberStyles.HexNumber);
+                            int dec2 = int.Parse(l[1].ToString(), System.Globalization.NumberStyles.HexNumber);
+                            //get corresponding in sBox
+                            for_xor = sBox[dec1, dec2];
+                            // Console.WriteLine(l+" "+for_xor.ToString("X2"));
 
                         }
                         else
-                            {   //shift
-                                string l = key[i+1, 3].ToString("X2");
-                                int dec1 = int.Parse(l[0].ToString(), System.Globalization.NumberStyles.HexNumber);
-                                int dec2 = int.Parse(l[1].ToString(), System.Globalization.NumberStyles.HexNumber);
-                                //get corresponding in sBox
-                                for_xor = sBox[dec1, dec2];
-                          // Console.WriteLine(l + " " + for_xor.ToString("X2"));
+                        {   //shift
+                            string l = key[i + 1, 3].ToString("X2");
+                            int dec1 = int.Parse(l[0].ToString(), System.Globalization.NumberStyles.HexNumber);
+                            int dec2 = int.Parse(l[1].ToString(), System.Globalization.NumberStyles.HexNumber);
+                            //get corresponding in sBox
+                            for_xor = sBox[dec1, dec2];
+                            // Console.WriteLine(l + " " + for_xor.ToString("X2"));
 
                         }
 
@@ -264,7 +244,8 @@ namespace SecurityLibrary.AES
                         {
                             r = rcon[round - 1];
                         }
-                        else {
+                        else
+                        {
                             r = 0;
                         }
                         //Console.WriteLine(key[i, d].ToString("X2")+" "+ for_xor.ToString("X2")+" "+ r.ToString("X2")) ;
@@ -273,7 +254,8 @@ namespace SecurityLibrary.AES
 
                     }
                 }
-                else {
+                else
+                {
                     for (int j = 0; j < 4; j++)
                     {
                         // Console.WriteLine(key[d, j].ToString("X2") + " " + for_xor.ToString("X2") + " " + r.ToString("X2"));
@@ -290,32 +272,54 @@ namespace SecurityLibrary.AES
 
                 }
 
-                }
+            }
             return new_key;
         }
 
 
-        public byte[,] xor_byte(byte[,] matrix1, byte[,] matrix2)
+        public byte[,] round(byte[,] plainText_byte, byte[,] key_byte, int m, int no_round)
         {
-
-            byte[,] result = new byte[4, 4];
-            for (int i = 0; i < 4; i++)
-            {
-
-                for (int j = 0; j < 4; j++)
-                {
-
-                    result[i, j] = (byte)(matrix1[i, j] ^ matrix2[i, j]);
-                }
+            //start from 1 ,2,3,4,5,6,7,8,9 (10-->do nothing)
+            
+            if (no_round == 1) {
+                plainText_byte = XOR(plainText_byte, key_byte,m);
             }
+            else if (no_round == 10)
+            {
+                byte[,] last_s = s_box(plainText_byte, m); //subbyte step
+                byte[,] last_shifted = shift(last_s, m); //shift row step
+                byte[,] last_round1 = generate_key_round(key_byte, no_round); //generate key round
 
+                byte[,] last_output = XOR(last_round1, last_shifted,m); //addroundKey step
+                return last_output;
+            }
+         
+            byte[,] after_s_box = s_box(plainText_byte, m); //subbyte step
+            byte[,] shifted_matrix = shift(after_s_box, m); //shift row step
+            byte[,] after_mix = mix_column(shifted_matrix);            //mix_column step
 
-            return result;
+            byte[,] round1 = generate_key_round(key_byte, no_round); //generate key round
+            no_round++;
+
+            byte[,] output_matrix = XOR(round1, after_mix,m); //addroundKey step
+            return round(output_matrix, round1, m, no_round);
         }
 
 
+        public string to_one_row(byte[,] matrix,int m)
+        {
+            string a="0x";
 
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < m ; j++)
+                {
 
+                    a += matrix[j, i].ToString("X2");
+                }
+            }
+            return a;
+        }
 
 
         public override string Decrypt(string cipherText, string key)
@@ -325,33 +329,38 @@ namespace SecurityLibrary.AES
 
         public override string Encrypt(string plainText, string key)
         {
-
             int m = (int)Math.Sqrt((double)key.Length / 2);
 
-            //s_box step
+            byte[,] plainText_byte = to_byte_matrix(to_matrix(plainText));
+            byte[,] key_byte = to_byte_matrix(to_matrix(key));
+
+            byte[,]final =round(plainText_byte, key_byte, m, 1);            //s_box step
             #region test_key
             //string[,] test_round_key = new string[4, 4] { {"0f","15","71","c9" },
             //                                            { "47","d9","e8","59"},
             //                                            {"0c","b7","ad","ad" },
             //                                            { "af","7f","67","98"} };
             #endregion
+            #region comments
+            //byte[,] a=XOR(plainText_byte, key_byte, m);
+            //byte[,] f = s_box(a,m); //subbyte step
+
+            //byte[,] shifted_matrix = shift(f, m); //shift row step
+            //byte[,] after_mix = mix_column(shifted_matrix);            //mix_column step
+            //byte[,] round1 = generate_key_round(key_byte, 1); //generate key round
+            //byte[,] output_matrix = xor_byte(round1, after_mix); //addroundKey step
+            #endregion
 
 
+            string x = to_one_row(final,m);
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    Console.WriteLine(final[i, 0].ToString("X2") + " " + final[i, 1].ToString("X2") + " " + final[i, 2].ToString("X2") + " " + final[i, 3].ToString("X2"));
+            //}
 
-            string[,] f = s_box(to_matrix(plainText), to_matrix(key), m); //subbyte step
+            Console.WriteLine(x);
 
-            string[,] shifted_matrix= shift(f, m); //shift row step
-            byte[,] bytee=to_byte_matrix(shifted_matrix); //convert string matrix to byte matrix
-           byte[,]after_mix= mix_column(bytee);            //mix_column step
-            byte[,] round1 =generate_key_round(to_byte_matrix(to_matrix(key)), 1); //generate key round
-            byte[,] addroundKey = xor_byte(round1,after_mix); //addroundKey step
-            for (int i = 0; i < 4; i++)
-            {
-                Console.WriteLine(addroundKey[i, 0].ToString("X2") + " " + addroundKey[i, 1].ToString("X2") + " " + addroundKey[i, 2].ToString("X2") + " " + addroundKey[i, 3].ToString("X2"));
-            }
-
-            throw new NotImplementedException();
+            return x;
         }
-
     }
 }
