@@ -129,15 +129,6 @@ namespace SecurityPackageTest
             Assert.IsTrue(plain.Equals(newPlain, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        [TestMethod]
-        public void AES()
-        {
-            AES algorithm = new AES();
-            Console.WriteLine();
-            string plain = algorithm.Encrypt("", "");
-            Assert.IsTrue(plain.Equals(newPlain, StringComparison.InvariantCultureIgnoreCase));
-        }
-
 
     }
 }
